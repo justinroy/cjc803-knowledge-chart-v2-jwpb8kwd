@@ -14,6 +14,7 @@ import { DataService } from '../../services/data';
 })
 export class DriverBaselineComponent {
   readonly Math = Math;
+  private readonly funnyAvatarEmojis = ['🤠', '🤡', '🦄', '🐸', '🐵', '👽', '🐼', '🦊'];
   private dataService = inject(DataService);
 
   expandedDriverId: string | null = null;
@@ -67,6 +68,27 @@ export class DriverBaselineComponent {
 
   driverName(driverId: string) {
     return this.driversMetaById.get(driverId)?.name ?? driverId;
+  }
+
+  getFunnyProfileUrl(driverId: string) {
+    const hash = this.hashString(driverId);
+    const emoji = this.funnyAvatarEmojis[hash % this.funnyAvatarEmojis.length];
+    const hue = hash % 360;
+
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="funny avatar"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="hsl(${hue} 88% 86%)"/><stop offset="100%" stop-color="hsl(${(hue + 50) % 360} 92% 74%)"/></linearGradient></defs><rect width="64" height="64" rx="32" fill="url(#g)"/><text x="32" y="42" text-anchor="middle" font-size="31">${emoji}</text></svg>`;
+
+    return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+  }
+
+  private hashString(value: string) {
+    let hash = 0;
+
+    for (let i = 0; i < value.length; i += 1) {
+      hash = (hash << 5) - hash + value.charCodeAt(i);
+      hash |= 0;
+    }
+
+    return Math.abs(hash);
   }
 
   // ---------- Driver expand/collapse ----------
