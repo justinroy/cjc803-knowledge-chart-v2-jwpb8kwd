@@ -153,8 +153,17 @@
               />
             </td>
 
-            <td class="driver clickable" (click)="toggleDriver(d.driverId)">
-              {{ d.name }}
+            <td>
+              <div class="driver-cell">
+                <img
+                  class="driver-avatar"
+                  [src]="getFunnyProfileUrl(d.driverId)"
+                  [alt]="d.name + ' profile picture'"
+                  loading="lazy"
+                  referrerpolicy="no-referrer"
+                />
+                <span class="driver clickable" (click)="toggleDriver(d.driverId)">{{ d.name }}</span>
+              </div>
             </td>
 
             <td>{{ d.seniority }}</td>

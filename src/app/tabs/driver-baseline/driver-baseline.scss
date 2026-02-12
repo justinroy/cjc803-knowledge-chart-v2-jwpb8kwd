@@ -163,6 +163,23 @@ tbody tr:hover { background: #fff8e1; }
   color: #351c15;
 }
 
+.driver-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.driver-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid #ffb500;
+  background: #fff;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+
 .clickable {
   cursor: pointer;
   text-decoration: underline;
