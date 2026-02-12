@@ -1,18 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
-import { DriverBaseline } from './driver-baseline';
+import { DriverBaselineComponent } from './driver-baseline';
 
-describe('DriverBaseline', () => {
-  let component: DriverBaseline;
-  let fixture: ComponentFixture<DriverBaseline>;
+describe('DriverBaselineComponent', () => {
+  let component: DriverBaselineComponent;
+  let fixture: ComponentFixture<DriverBaselineComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DriverBaseline]
-    })
-    .compileComponents();
+      imports: [DriverBaselineComponent],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(DriverBaseline);
+    fixture = TestBed.createComponent(DriverBaselineComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

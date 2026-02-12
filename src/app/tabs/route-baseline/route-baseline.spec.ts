@@ -1,18 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
-import { RouteBaseline } from './route-baseline';
+import { RouteBaselineComponent } from './route-baseline';
 
-describe('RouteBaseline', () => {
-  let component: RouteBaseline;
-  let fixture: ComponentFixture<RouteBaseline>;
+describe('RouteBaselineComponent', () => {
+  let component: RouteBaselineComponent;
+  let fixture: ComponentFixture<RouteBaselineComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouteBaseline]
-    })
-    .compileComponents();
+      imports: [RouteBaselineComponent],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(RouteBaseline);
+    fixture = TestBed.createComponent(RouteBaselineComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
