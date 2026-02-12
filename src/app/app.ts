@@ -69,6 +69,29 @@ type TabKey = 'routes' | 'drivers' | 'comparison';
         <app-driver-baseline *ngIf="activeTab === 'drivers'"></app-driver-baseline>
         <app-comparison *ngIf="activeTab === 'comparison'"></app-comparison>
       </main>
+
+      <section class="chatbot">
+        <h2>Joke Bot</h2>
+        <p class="chatbot-sub">This chatbot only responds with jokes.</p>
+
+        <div class="chat-window">
+          <div class="message" *ngFor="let message of chatMessages" [class.user]="message.sender === 'user'">
+            <strong>{{ message.sender === 'user' ? 'You' : 'Joke Bot' }}:</strong>
+            <span>{{ message.text }}</span>
+          </div>
+        </div>
+
+        <div class="chat-input-row">
+          <input
+            type="text"
+            [value]="userMessage"
+            (input)="onMessageChange($event)"
+            (keyup.enter)="sendMessage()"
+            placeholder="Ask for a joke..."
+          />
+          <button type="button" (click)="sendMessage()">Send</button>
+        </div>
+      </section>
     </div>
   `,
   styles: [`
@@ -146,10 +169,94 @@ type TabKey = 'routes' | 'drivers' | 'comparison';
       padding: 24px;
       background: #ffffff;
     }
+
+    .chatbot {
+      margin: 0 24px 24px;
+      padding: 16px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fafafa;
+    }
+
+    .chatbot h2 {
+      margin: 0;
+      color: #351c15;
+      font-size: 18px;
+    }
+
+    .chatbot-sub {
+      margin: 6px 0 12px;
+      font-size: 13px;
+      color: #555;
+    }
+
+    .chat-window {
+      border: 1px solid #e4e4e4;
+      border-radius: 6px;
+      background: #fff;
+      max-height: 240px;
+      overflow-y: auto;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .message {
+      background: #f2f2f2;
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 14px;
+      display: flex;
+      gap: 4px;
+      align-items: baseline;
+    }
+
+    .message.user {
+      background: #fff2cc;
+    }
+
+    .chat-input-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .chat-input-row input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .chat-input-row button {
+      padding: 8px 14px;
+      border: none;
+      border-radius: 4px;
+      background: #351c15;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 600;
+    }
   `]
 })
 export class AppComponent implements OnInit {
   activeTab: TabKey = 'routes';
+  userMessage = '';
+  chatMessages: Array<{ sender: 'user' | 'bot'; text: string }> = [
+    {
+      sender: 'bot',
+      text: 'Hi! I only tell jokes. Ask me for one and I\'ll do my best 😄'
+    }
+  ];
+  private readonly jokes = [
+    'Why did the developer go broke? Because they used up all their cache.',
+    'Why do Java developers wear glasses? Because they do not C#.',
+    'I told my code a joke… but it did not get the class inheritance.',
+    'Why was the JavaScript file so calm? It had no unresolved issues.',
+    'I would tell you a UDP joke, but you might not get it.'
+  ];
 
   constructor(private dataService: DataService) {}
 
@@ -177,6 +284,23 @@ onStartDateChange(event: Event) {
 onEndDateChange(event: Event) {
   this.endDate = (event.target as HTMLInputElement).value || null;
   // optional: later we’ll push this into viewConfig
+}
+
+onMessageChange(event: Event) {
+  this.userMessage = (event.target as HTMLInputElement).value;
+}
+
+sendMessage() {
+  const trimmedMessage = this.userMessage.trim();
+  if (!trimmedMessage) {
+    return;
+  }
+
+  this.chatMessages.push({ sender: 'user', text: trimmedMessage });
+  this.userMessage = '';
+
+  const joke = this.jokes[Math.floor(Math.random() * this.jokes.length)];
+  this.chatMessages.push({ sender: 'bot', text: joke });
 }
 
 }
